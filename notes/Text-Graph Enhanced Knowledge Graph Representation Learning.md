@@ -21,26 +21,26 @@ Stages:
 
 ## Triplet Embedding
 - Triplet can be thought of as a (subject, object, predicate) or a (head, tail, relationship) relationship in the context of a sentence. 
-- For eg: Delhi is located in India. -> (Delhi, India, locat)
+- For eg: $\text{Delhi is located in India.} \to \text{(Delhi, India, locat)}$
 - used TransE
 - check semantic relationships by how much closer head entity plus relationship is to the tail entity
-- ```f (h, r, t) = -||h + r − t||^2,```
+- $$f (h, r, t) = -||h + r − t||^2$$
 - entities are closer in semantic meaning when this distance is less
 
 ## Auxiliary Text encoding
 - Text graph = entity-word graph
 - entity (named entity, important special noun, subject/object) vs word (NLP unit, there can be many words in an entity)
 - Text Graph construction:
-	- G = {V, E}, where V = nodes given by E (entities) + W (words); E = edges
-	- For every entity e, we get first k words with highest TF-IDF
+	- $G = \{V, E\}$, where $V = \text{nodes}$ given by $E \text{(entities)} + W \text{(words)}$; $E = \text{edges}$
+	- For every entity $e$, we get first $k$ words with highest TF-IDF
 
 ## KG Representation Fusion
-- We calculate a convolution to integrate the entity embeddings of structural triplets (es) and those of auxiliary texts (ed) using the gating vector (ge) through the relation: 
-	``e = ge ⊙ es + (1 − ge) ⊙ ed``
+- We calculate a convolution to integrate the entity embeddings of structural triplets ($e_s$) and those of auxiliary texts ($e_d$) using the gating vector ($g_e$) through the relation: 
+	$$e = g_e \odot e_s + (1 − g_e) \odot e_d$$
 
 
 ## End-to-end Model Training
-- The loss function L is calculated as the margin between collection of correct samples (S) and the collection of incorrect triplets (S') by generating negative samples using a sampling strategy "bern".
-	``L = Σ (h,r,t)∈S Σ (h′,r,t′)∈S′ (max(c + f (h, r, t) − f (h′, r, t′), 0))``
-- f is a scoring function defined for a particular triplet also defined in the paper. 
+- The loss function $L$ is calculated as the margin between collection of correct samples ($S$) and the collection of incorrect triplets ($S'$) by generating negative samples using a sampling strategy "bern".
+	$$L = \sum_{(h,r,t)\in S} \sum_{(h',r,t')\in S'} max(\gamma	 + f (h, r, t) − f (h', r, t'), 0)$$
+- $f$ is a scoring function defined for a particular triplet also defined in the paper. 
 - Optimizers like Adam are also used.
